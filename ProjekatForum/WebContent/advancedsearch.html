@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="js/jquery-3.2.1.js"></script>
+<script src="js/various.js"></script>
+<script src="js/search.js"></script>
+<script type="text/javascript">
+function preparation(){
+	subforum = '<p>Претражи подфоруме по:</p><input type="radio" name="subforum" checked>наслову <input type="radio" name="subforum">опису <input type="radio" name="subforum">одговорном модератору</div>';
+	topic = '<p>Претражи теме по:</p><input type="radio" name="topic" checked>наслову <input type="radio" name="topic">садржају <input type="radio" name="topic">аутору<input type="radio" name="topic">подфоруму';
+}
+
+$(document).ready(function() {
+	$("input[name='srch-type']").on("click change", function(e) {
+		var t = $("#div");
+		if (e.target.value == "SUBFORUM") {
+			t.addClass("search-type")
+			t[0].innerHTML = subforum;
+		} else if (e.target.value == "TOPIC") {
+			t.addClass("search-type")
+			t[0].innerHTML = topic;
+		} else if (e.target.value == "USER") {
+			t.removeClass();
+			t[0].innerHTML = "";
+		}
+	});
+});
+</script>
+<title>Напредна претрага</title>
+</head>
+<body class="main-body" onload="preparation(); noUserIndexMenu('rest/user/getHeader/user'); appendMenu('rest/user/isUserType/ADMIN', 'user/changeuser.html');">
+	<div class="topbar"></div>
+	<div class="topmargin">
+		<a href="index.html">ГРМЕЧ-<i>ONLINE</i></a>
+	</div>
+	<ul class="menu-ulist" id="menu">
+		<li class="menu-item"><a title="Насловна страница"
+			href="index.html"><span>Почетна</span></a></li>
+			<li class="menu-item"><a title="Претрага"
+			href="search.html"><span>Претрага</span></a></li>
+		<li class="menu-item"><a href="../user/register.html"><span>Регистрација</span></a></li>
+		<li class="menu-item"><a href="../user/login.html"><span>Пријава</span></a></li>
+	</ul>
+	<br>
+	<br>
+	<div class="topic-head">
+		<h2 class="topic-title">Напредна претрага</h2>
+	</div>
+	<div class="advanced-search">
+		<form action="" method="post" onsubmit="return advancedSearch(this);">
+			<input class="adv-search-field" type="text" value="Претражи сајт..." id="search-field">
+			<input class="search-button" type="submit" value="Тражи"
+				style="float: left"> <br> <br>
+			<div>
+				<input type="radio" name="srch-type" value="SUBFORUM" checked>Подфорум <input
+					type="radio" name="srch-type" value="TOPIC">Тема<input type="radio"
+					name="srch-type" value="USER">Корисник
+			</div>
+			<div class="search-type" id="div">
+				<p>Претражи подфоруме по:</p>
+				<input type="radio" name="subforum" checked>наслову <input
+					type="radio" name="subforum">опису <input type="radio"
+					name="subforum">одговорном модератору
+			</div>
+			<br>
+		</form>
+	</div>
+	<div id="search-results"></div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../style.css">
+<script src="../js/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+	$.get("../rest/user/getHeader/user", function(data){
+		if(data.value == ""){
+			window.location = "login.html";
+		}
+	});
+</script>
+<script src="../js/various.js"></script>
+<script src="../js/uservalidation.js"></script>
+<script src="../js/subforums.js"></script>
+<script src="../js/topics.js"></script>
+<script type="text/javascript">
+	function prepareElements() {
+		txtArea = '<textarea id="txt" style="width: 600px; height: 250px"></textarea>';
+		link = '<input type="url" id="link" style="width: 600px;">';
+		pic = '<input class="filechooser" type="file" id="icon" onchange="loadImage();">';
+		$.get("../rest/user/getHeader/subforum", function(data) {
+			var title = $("#topic-title");
+			title[0].innerHTML = data.value;
+		});
+	}
+
+	$(document).ready(function() {
+		$("input[type='radio']").on("click change", function(e) {
+			var t = $("#content");
+			if (e.target.value == "LINK") {
+				t[0].innerHTML = link;
+			} else if (e.target.value == "TEXT") {
+				t[0].innerHTML = txtArea;
+			} else if (e.target.value == "PICTURE") {
+				t[0].innerHTML = pic;
+			}
+		});
+	});
+</script>
+<title>Нова тема</title>
+</head>
+<body class="main-body" onload="prepareElements(); noUserMenu('../rest/user/getHeader/user'); appendMenu('../rest/user/isUserType/ADMIN', '../user/changeuser.html');">
+	<div class="topbar"></div>
+	<div class="topmargin">
+		<a href="../index.html">ГРМЕЧ-<i>ONLINE</i></a>
+	</div>
+	<ul class="menu-ulist" id="menu">
+		<li class="menu-item"><a title="Насловна страница"
+			href="../index.html"><span>Почетна</span></a></li>
+			<li class="menu-item"><a title="Претрага"
+			href="../search.html"><span>Претрага</span></a></li>
+	</ul>
+	<br>
+	<br>
+	<br>
+	<div class="topic-head">
+		<h2 class="topic-title" id="topic-title"></h2>
+	</div>
+	<form onsubmit="return createTopic();" id="registerForm" action="">
+		<table class="table-basic" style="max-width: 1000px;">
+			<tbody>
+				<tr>
+					<td class="thead" colspan="2" align="center">Додај нову тему</td>
+				</tr>
+				<tr>
+					<td class="rowhead" width="30%" align="right">Наслов:</td>
+					<td width="70%" align="left"><input name="username" id="title"
+						value="" autocomplete="off" size="35" type="text"></td>
+				</tr>
+				<tr>
+					<td class="rowhead" width="30%" align="right">Тип:</td>
+					<td><input type="radio" name="type" value="TEXT" checked>Текст
+						<input type="radio" name="type" value="PICTURE">Слика <input
+						type="radio" name="type" value="LINK" />Линк</td>
+				</tr>
+				<tr>
+					<td class="rowhead" align="center" colspan="2" id="content"
+						style="text-align: center"><textarea id="txt"
+							style="width: 600px; height: 250px"></textarea></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="subheader" align="center"><input
+						id="submit" value="Направи тему" type="submit"
+						onsubmit="return createTopic();">
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</body>
+</html>

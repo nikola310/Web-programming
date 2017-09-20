@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../style.css">
+<script src="../js/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+	$.get("../rest/user/getHeader/user", function(data){
+		if(data.value != ""){
+			window.location = "userpage.html";
+		}
+	});
+</script>
+<script type="text/javascript">
+	$.get("../rest/user/getHeader/user", function(data){
+		if(data.value != ""){
+			window.location = "userpage.html";
+		}
+	});
+</script>
+<script src="../js/various.js"></script>
+<script src="../js/uservalidation.js"></script>
+<title>Регистрација</title>
+</head>
+<body class="main-body">
+	<div class="topbar"></div>
+	<div class="topmargin">
+		<a href="../index.html">ГРМЕЧ-<i>ONLINE</i></a>
+	</div>
+	<ul class="menu-ulist">
+		<li class="menu-item"><a title="Насловна страница"
+			href="../index.html"><span>Почетна</span></a></li>
+			<li class="menu-item"><a title="Претрага"
+			href="../search.html"><span>Претрага</span></a></li>
+		<li class="menu-item"><a href="register.html"><span>Регистрација</span></a></li>
+		<li class="menu-item"><a href="login.html"><span>Пријава</span></a></li>
+	</ul>
+	<br>
+	<form onsubmit="return register();" id="registerForm" action="login.html">
+		<table class="table-basic" style="max-width: 1000px;">
+			<tbody>
+				<tr>
+					<td class="thead" colspan="2" align="center">Регистрација</td>
+				</tr>
+				<tr>
+					<td class="rowhead" width="30%" align="right">Корисничко име:</td>
+					<td width="70%" align="left"><input name="username"
+						id="username" value="" autocomplete="off" size="35" type="text"></td>
+				</tr>
+				<tr>
+					<td class="rowhead" width="30%" align="right">Шифра:</td>
+					<td width="70%" align="left"><input name="password"
+						id="password" value="" autocomplete="off" size="35"
+						type="password"></td>
+				</tr>
+				<tr>
+					<td class="rowhead" width="30%" align="right">Потврди шифру:</td>
+					<td width="70%" align="left"><input name="password2"
+						id="password2" value="" autocomplete="off" size="35"
+						type="password"></td>
+				</tr>
+				<tr>
+					<td class="rowhead" width="30%" align="right"><i>Email</i>
+						адреса:</td>
+					<td width="70%" align="left"><input name="email" id="email"
+						value="" autocomplete="off" size="35" type="email"></td>
+				</tr>
+				<tr>
+					<td class="rowhead" width="30%" align="right">Име:</td>
+					<td width="70%" align="left"><input name="name" id="name"
+						value="" autocomplete="on" size="35" type="text"></td>
+				</tr>
+				<tr>
+					<td class="rowhead" width="30%" align="right">Презиме:</td>
+					<td width="70%" align="left"><input name="surname"
+						id="surname" value="" autocomplete="on" size="35" type="text">
+					</td>
+				</tr>
+				<tr>
+					<td class="rowhead" width="30%" align="right">Контакт телефон:</td>
+					<td width="70%" align="left"><input name="telephone"
+						id="telephone" value="" autocomplete="off" size="35" type="tel">
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="2" class="subheader" align="center"><input
+						id="submit" value="Региструј се" type="submit"> <input
+						id="reset" value="Ресетуј поља" type="reset"></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</body>
+</html>

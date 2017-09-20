@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../style.css">
+<script src="../js/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+	$.get("../rest/user/getHeader/user", function(data){
+		if(data.value != ""){
+			window.location = "userpage.html";
+		}
+	});
+</script>
+<script>
+function  sendData() {
+			
+	$.ajax({
+		type : "POST",
+		url : "../rest/user/login",
+		data : JSON.stringify({
+			"username" : $("#usname").val(),
+			"password" : $("#pass").val()
+		}),
+		contentType : "application/json; charset=utf-8",
+		dataType : "json",
+		success : function(data) {
+				//console.log(data);
+			if (data) {
+				window.location = "userpage.html"; //"../index.html"
+			} else {
+				if(document.getElementById("war") == null){
+					var tmp = "<tr id='war'><td colspan='2' style='color:red; text-align:center; font-size: 15px;'>Погрешно корисничко име или лозинка. Проверите тачност унетих података.</td></tr>";
+					$(tmp).insertBefore("#wrongpass");
+				}
+			}
+			}
+		});
+	return false;
+	}
+	
+function checkLoading(){
+	if(window.name == "RegisterSuccessful"){
+		var tlrt = '<p align="center"><font color="red">Регистрација успешна. Можете се сада пријавити.</font></p>'
+		$(tlrt).insertBefore("form");
+		window.name = "";
+	}
+}
+</script>
+<title>Пријава</title>
+</head>
+<body class="main-body" onload="checkLoading();">
+	<div class="topbar"></div>
+	<div class="topmargin">
+		<a href="../index.html">ГРМЕЧ-<i>ONLINE</i></a>
+	</div>
+	<ul class="menu-ulist" id="menu">
+		<li class="menu-item"><a title="Насловна страница"
+			href="../index.html"><span>Почетна</span></a></li>
+			<li class="menu-item"><a title="Претрага"
+			href="../search.html"><span>Претрага</span></a></li>
+		<li class="menu-item"><a href="register.html"><span>Регистрација</span></a></li>
+		<li class="menu-item"><a href="login.html"><span>Пријава</span></a></li>
+	</ul>
+	<br>
+<form onsubmit="return sendData()">
+	<table class="table-basic" id="loginTable" style="max-width: 1000px;">
+		<tbody>
+			<tr>
+				<td colspan="2" class="thead" align="center">Пријава</td>
+			</tr>
+			<tr id="wrongpass">
+				<td class="rowhead">Корисничко име:</td>
+				<td align="left"><input name="username" class="input-username"
+					value="" type="text" id="usname"></td>
+			</tr>
+			<tr>
+				<td class="rowhead">Шифра:</td>
+				<td align="left"><input name="password" class="input-password"
+					value="" type="password" id="pass"></td>
+			</tr>
+			<tr>
+				<td align="center" colspan="2"><input value="Пријави се"
+					type="submit" id="loginButton"> <input value="Поништи"
+					type="reset" id="resetButton"></td>
+			</tr>
+		</tbody>
+	</table>
+	</form>
+</body>
+</html>

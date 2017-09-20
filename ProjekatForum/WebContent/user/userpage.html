@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../style.css">
+<script src="../js/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+	$.get("../rest/user/getHeader/user", function(data){
+		if(data.value == ""){
+			window.location = "login.html";
+		}
+	});
+</script>
+<script src="../js/various.js"></script>
+<script src="../js/uservalidation.js"></script>
+<script type="text/javascript">
+	function loadInbox() {
+		$.get("../rest/message/inbox", function(data) {
+			if (data.length > 0) {
+				var table = document.getElementById("inbox");
+				var l = $("<strong>");
+				var k = $("<h4>");
+				k.attr("class", "h4-podforum");
+				var d = $("<div>");
+				jQuery.each(data, function(i, val) {
+
+					var row = table.insertRow(1);
+					var cell1 = row.insertCell(0);
+					var cell2 = row.insertCell(1);
+					var cell3 = row.insertCell(2);
+
+					l[0].innerHTML = val.sender;
+					d[0].innerHTML = val.text;
+
+					k[0].innerHTML = l[0].outerHTML;
+
+					d.attr("id", i.toString());
+
+					if (val.read == false) {
+						d.attr("class", "unread");
+					} else {
+						d.attr("class", "msg-text");
+					}
+					
+					var btn = $('<button/>', {
+						id: "save-" + i,
+						html: "Сачувај"
+					});
+					btn.attr("onclick", "saveMessage(this)");
+
+					cell2.innerHTML = k[0].outerHTML + " " + btn[0].outerHTML + d[0].outerHTML;
+
+					$(document).on('click', i, function(e) {
+						if (e.target.getAttribute("class") == "unread") {
+							e.target.setAttribute("class", "msg-text");
+							var idx = parseInt(e.target.getAttribute("id"));
+							
+							$.ajax({
+								type : "POST",
+								url : "../rest/message/readMessage",
+								contentType : "application/json; charset=utf-8",
+								dataType : "json",
+								data : JSON.stringify({
+									"value" : idx
+								})    
+								});
+						}
+					});
+
+					d.removeClass("unread");
+					l[0].innerHTML = "";
+					d[0].innerHTML = "";
+					k[0].innerHTML = "";
+				});
+
+			} else {
+				var table = document.getElementById("inbox");
+				var row = table.insertRow(1);
+				var cell1 = row.insertCell(0);
+				cell1.setAttribute("colspan", "3");
+				cell1.setAttribute("class", "no-msg");
+				cell1.innerHTML = "Немате порука";
+			}
+		});
+	}
+</script>
+<title>Корисничка страница</title>
+</head>
+<body class="main-body" onload="loadRating(); loadSaved(); loadInbox(); readUsersSf(); appendMenu('../rest/user/isUserType/ADMIN', 'changeuser.html'); noUserMenu('../rest/user/getHeader/user');">
+	<div class="topbar"></div>
+	<div class="topmargin">
+		<a href="index.html">ГРМЕЧ-<i>ONLINE</i></a>
+	</div>
+	<ul class="menu-ulist" id="menu">
+		<li class="menu-item"><a title="Насловна страница"
+			href="../index.html"><span>Почетна</span></a></li>
+			<li class="menu-item"><a title="Претрага"
+			href="../search.html"><span>Претрага</span></a></li>
+	</ul>
+	<br>
+	<br>
+	<h2 class="topic-title" id="rating"></h2>
+	<table class="table-basic" id="saved-comments" style="max-width: 1000px;">
+		<tbody>
+			<tr>
+				<td colspan="2" class="thead" align="center">Сачувани коментари</td>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	<table class="table-basic" id="saved-messages" style="max-width: 1000px;">
+		<tbody>
+			<tr>
+				<td colspan="2" class="thead" align="center">Сачуване поруке</td>
+			</tr>
+		</tbody>
+	</table>
+	<br><table class="table-basic" id="saved-topics" style="max-width: 1000px;">
+		<tbody>
+			<tr>
+				<td colspan="2" class="thead" align="center">Сачуване теме</td>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	<table class="main-table" border="1" id="subforums-table"
+		style="max-width: 1000px;">
+		<tbody>
+			<tr>
+				<td class="thead" colspan="4"><strong>Подфоруми</strong></td>
+			</tr>
+			<!-- tr>
+				<td class="subheader"><strong>Назив</strong></td>
+				<td class="subheader" width="200" align="center"><strong>Иконица</strong></td>
+			</tr> -->
+		</tbody>
+	</table>
+	<br>
+	<table class="main-table" border="1" id="inbox" style="max-width: 1000px;">
+		<tbody>
+			<tr>
+				<td class="thead" colspan="4"><strong>Примљене поруке</strong></td>
+			</tr>
+		</tbody>
+	</table>
+	<p>
+		<a href="sendmessage.html" class="button">Пошаљи нову поруку.</a>
+	</p>
+
+</body>
+</html>

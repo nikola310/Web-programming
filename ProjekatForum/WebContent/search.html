@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="js/jquery-3.2.1.js"></script>
+<script src="js/various.js"></script>
+<script src="js/search.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<title>Претрага</title>
+</head>
+<body class="main-body" onload="noUserIndexMenu('rest/user/getHeader/user'); appendMenu('rest/user/isUserType/ADMIN', 'user/changeuser.html');">
+	<div class="topbar"></div>
+	<div class="topmargin">
+		<a href="index.html">ГРМЕЧ-<i>ONLINE</i></a>
+	</div>
+	<ul class="menu-ulist" id="menu">
+		<li class="menu-item"><a title="Насловна страница"
+			href="index.html"><span>Почетна</span></a></li>
+		<li class="menu-item"><a href="user/register.html"><span>Регистрација</span></a></li>
+		<li class="menu-item"><a href="user/login.html"><span>Пријава</span></a></li>
+	</ul>
+	<br>
+	<br>
+	<div class="topic-head">
+		<h2 class="topic-title">Претрага</h2>
+	</div>
+	<div class="advanced-search">
+		<form action="" method="post" onsubmit="return getSearchResults();">
+			<input class="adv-search-field" type="text" value="Претражи сајт..."
+				id="search-string"> <input class="search-button"
+				type="submit" value="Тражи" style="float: left"> <br> <br>
+			<br>
+		</form>
+		<a href="advancedsearch.html" class="button">Напредна претрага</a>
+	</div>
+	<div id="search-results"></div>
+</body>
+</html>

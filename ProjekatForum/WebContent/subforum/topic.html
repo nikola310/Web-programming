@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../style.css">
+<script src="../js/jquery-3.2.1.js"></script>
+<script src="../js/various.js"></script>
+<script src="../js/uservalidation.js"></script>
+<script src="../js/topics.js"></script>
+<script>
+	function commBox(e) {
+		console.log(e);
+		if($(".klasa").length > 0){
+			$(".klasa").remove();
+		}
+		if($("#new-comm").length == 0){
+			var t = $("<button>");
+			t[0].innerHTML = "Коментариши";
+			t.attr("onclick", "commBox(this);");
+			t.attr("id", "new-comm");
+			t.insertAfter("#topic-content");
+		}
+		if (e.id == "new-comm") {
+
+			var div = $("<div>");
+			div.attr("class", "usertext-edit");
+			var forma = $("<form>");
+			forma.attr("method", "post");
+			forma.attr("class", "klasa");
+			forma.attr("onsubmit", "return newComment(this);");
+			var txt = $("<textarea>");
+			txt.attr("id", "content");
+			txt.css("max-width", "600px");
+			txt.css("max-height", "100px");
+			txt.css("height", "100px");
+			txt.css("width", "600px");
+			var br = $("<br>");
+			var potvrdi = $("<input>");
+			var odustani = $("<input>");
+			potvrdi.attr("type", "submit");
+			odustani.attr("type", "button");
+			potvrdi.attr("value", "Потврди");
+			odustani.attr("value", "Одустани");
+			potvrdi.attr("style", "margin: 5px");
+			odustani.attr("onclick", "giveUp(this);");
+			forma[0].innerHTML = txt[0].outerHTML + br[0].outerHTML + potvrdi[0].outerHTML + odustani[0].outerHTML;
+			forma.insertAfter("#new-comm");
+			$("#new-comm").remove();
+		}else{
+			var div = $("<div>");
+			div.attr("class", "usertext-edit");
+			var forma = $("<form>");
+			forma.attr("method", "post");
+			forma.attr("class", "klasa");
+			forma.attr("onsubmit", "return commReply(this);");
+			var txt = $("<textarea>");
+			txt.attr("id", "content");
+			txt.css("max-width", "600px");
+			txt.css("max-height", "100px");
+			txt.css("height", "100px");
+			txt.css("width", "600px");
+			var br = $("<br>");
+			var potvrdi = $("<input>");
+			var odustani = $("<input>");
+			potvrdi.attr("type", "submit");
+			odustani.attr("type", "button");
+			potvrdi.attr("value", "Потврди");
+			odustani.attr("value", "Одустани");
+			potvrdi.attr("style", "margin: 5px");
+			odustani.attr("onclick", "giveUp(this);");
+			forma[0].innerHTML = txt[0].outerHTML + br[0].outerHTML + potvrdi[0].outerHTML + odustani[0].outerHTML;
+			forma.attr("id", "form-" + e.id.split(/-(.+)/)[1]);
+			var ident = "#" + e.id.split(/-(.+)/)[1];
+			forma.insertAfter(ident);
+		}
+	}
+</script>
+<title>Тема</title>
+</head>
+<body class="main-body"
+	onload="getCurrentUser('../rest/user/getHeader/user'); loadTopic(); noUserMenu('../rest/user/getHeader/user'); appendMenu('../rest/user/isUserType/ADMIN', '../user/changeuser.html');">
+	<div class="topbar"></div>
+	<div class="topmargin">
+		<a href="../index.html">ГРМЕЧ-<i>ONLINE</i></a>
+	</div>
+	<ul class="menu-ulist" id="menu">
+		<li class="menu-item"><a title="Насловна страница"
+			href="../index.html"><span>Почетна</span></a></li>
+			<li class="menu-item"><a title="Претрага"
+			href="../search.html"><span>Претрага</span></a></li>
+	</ul>
+	<br>
+	<br>
+	<br>
+	<div class="topic-head">
+		<h2 class="topic-title" id="topic-title"></h2>
+		<p id="author"></p>
+	</div>
+	<div class="medium-text" id="topic-content"></div>
+		<div id="comm-bar"></div>
+	<div class="comments" id="comments-div"></div>
+</body>
+</html>

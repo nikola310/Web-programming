@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="js/jquery-3.2.1.js"></script>
+<script src="js/various.js"></script>
+<script src="js/uservalidation.js"></script>
+<script src="js/subforums.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<title>Насловна</title>
+</head>
+<body class="main-body" onload="loadSubscribed(); loadSubforums(); createSubforumBtn(); appendMenu('rest/user/isUserType/ADMIN', 'user/changeuser.html'); noUserIndexMenu('rest/user/getHeader/user');">
+	<div class="topbar"></div>
+	<div class="topmargin">
+		<a href="index.html">ГРМЕЧ-<i>ONLINE</i></a>
+	</div>
+	<ul class="menu-ulist" id="menu">
+		<li class="menu-item"><a title="Насловна страница"
+			href="index.html"><span>Почетна</span></a></li>
+		<li class="menu-item"><a href="search.html"><span>Претрага</span></a></li>
+	</ul>
+	<br>
+	<br />
+	<p id="p-new-subforum"></p>
+	<table class="main-table" border="1" id="subforums-table"
+		style="max-width: 1000px;">
+		<tbody>
+			<tr>
+				<td class="thead" colspan="4"><strong>Подфоруми</strong></td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr>
+				<td class="subheader"><strong>Назив</strong></td>
+				<td class="subheader" width="200" align="center"><strong>Иконица</strong></td>
+			</tr>
+		</tbody>
+	</table>
+	<br/>
+	<table class="main-table" border="1" id="topics"
+		style="max-width: 1000px;">
+		<tbody>
+			<tr>
+				<td class="thead" colspan="4"><strong>Теме</strong></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

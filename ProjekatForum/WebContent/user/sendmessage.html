@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="../style.css">
+<script src="../js/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+	$.get("../rest/user/getHeader/user", function(data){
+		if(data.value == ""){
+			window.location = "login.html";
+		}
+	});
+</script>
+<script src="../js/uservalidation.js"></script>
+<script type="text/javascript">
+	function recipientEmpty() {
+		var tmp = $("#recipient").val();
+		if (tmp == "") {
+			if (document.getElementById('recipient-war') == null) {
+				var tlrt = '<strong style="color:red;" id="recipient-war">&nbsp;&nbsp;Морате унети текст поруке.</strong>';
+				$(tlrt).insertAfter("#recipient");
+				$("#recipient").css("border-color", "red");
+			}
+			return true;
+		} else {
+			deleteElement("recipient-war");
+			return false;
+		}
+	}
+
+	function sendMessage() {
+		if (recipientEmpty())
+			return false;
+
+		$.ajax({
+					type : "POST",
+					url : "../rest/message/sendMessage",
+					data : JSON.stringify({
+						"recipient" : $("#recipient").val(),
+						"text" : $("#content").val()
+					}),
+					contentType : "application/json; charset=utf-8",
+					dataType : "json",
+					success : function(data) {
+						console.log(data.failed + data.errCode);
+						if (data.failed) {
+							//fail, zasto?
+							if (data.errCode == "NO_USER") {
+								if (document.getElementById('recipient-war') == null) {
+									var tlrt = '<strong style="color:red;" id="recipient-war">&nbsp;&nbsp;Не постоји корисник с тим именом.</strong>';
+									$(tlrt).insertAfter("#recipient");
+									$("#recipient").css("border-color", "red");
+								}
+							} else if (data.errCode == "SERVER_ERROR") {
+								alert("Internal server error.");
+							}
+						} else {
+							deleteElement("recipient-war");
+							alert("Poruka poslana");
+							window.location = "userpage.html";
+						}
+					}
+				});
+		return false;
+	}
+</script>
+<title>Пошаљи поруку</title>
+</head>
+<body class="main-body" onload="noUserMenu('../rest/user/getHeader/user'); appendMenu('../rest/user/isUserType/ADMIN', 'changeuser.html');">
+	<div class="topbar"></div>
+	<div class="topmargin">
+		<a href="../index.html">ГРМЕЧ-<i>ONLINE</i></a>
+	</div>
+	<ul class="menu-ulist" id="menu">
+		<li class="menu-item"><a title="Насловна страница"
+			href="../index.html"><span>Почетна</span></a></li>
+			<li class="menu-item"><a title="Претрага"
+			href="../search.html"><span>Претрага</span></a></li>
+	</ul>
+	<br>
+	<form onsubmit="return sendMessage();" action="userpage.html">
+		<table class="table-basic" style="max-width: 600px;">
+			<tbody>
+				<tr>
+					<td colspan="2" class="thead" align="center">Пошаљи поруку</td>
+				</tr>
+				<tr>
+					<td class="rowhead">Прималац:</td>
+					<td align="left"><input name="username" class="input-username"
+						id="recipient" value="" type="text"></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2"><textarea
+							style="width: 600px; height: 250px" id="content"></textarea></td>
+				</tr>
+				<tr>
+					<td align="left" colspan="2"><input value="Пошаљи поруку"
+						type="submit">
+				</tr>
+
+			</tbody>
+		</table>
+	</form>
+</body>
+</html>
