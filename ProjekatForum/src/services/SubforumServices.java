@@ -45,7 +45,6 @@ public class SubforumServices {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public ErrorBean newSubforum(Subforum sf) {
-		System.out.println("krenuo");
 		ErrorBean er = new ErrorBean();
 		File sfFile = FileUtilities.getSubforumDir(sf.getTitle());
 		User u = (User) request.getSession().getAttribute("user");
@@ -58,10 +57,9 @@ public class SubforumServices {
 		if (sfFile.mkdirs()) {
 
 		} else {
-			System.out.println("folder not createad");
+
 		}
 		File f = FileUtilities.getSubforumsFile();
-		System.out.println(f.getAbsolutePath());
 		ObjectMapper mapper = new ObjectMapper();
 		if (f.exists()) {
 			try {
@@ -70,7 +68,6 @@ public class SubforumServices {
 				});
 
 				if (tmp.containsKey(sf.getTitle())) {
-					System.out.println("Vec postoji podforum pod tim imenom");
 					er.setFailed(true);
 					er.setErrCode(ErrorBean.ALREADY_EXISTS_ERROR);
 				} else {
@@ -159,18 +156,15 @@ public class SubforumServices {
 						PrintWriter writer = new PrintWriter(f, "UTF-8");
 						writer.println(subForum);
 						writer.close();
-						System.out.println("deleting subforum dir...");
 						FileUtils.deleteDirectory(FileUtilities.getSubforumDir(sf.getTitle()));
 					} catch (IOException e) {
-						// TODO: handle exception
-						System.out.println("delete subforum error");
+						
 					}
 					return true;
 				} else {
 					return false;
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
@@ -205,7 +199,6 @@ public class SubforumServices {
 				Map<String, Topic> topicsTemp = mapper.readValue(topicsFile,
 						new TypeReference<CaseInsensitiveMap<String, Topic>>() {
 						});
-				System.out.println(topicsFile.getAbsolutePath());
 				for (String string : topicsTemp.keySet()) {
 					topicsRetVal.put(string, topicsTemp.get(string));
 				}
@@ -217,12 +210,12 @@ public class SubforumServices {
 		}
 		return topicsRetVal;
 	}
-	
+
 	@GET
 	@Path("/search/{searchString}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<String, Subforum> search(@PathParam("searchString") String searchString){
+	public Map<String, Subforum> search(@PathParam("searchString") String searchString) {
 		File subforumFile = FileUtilities.getSubforumsFile();
 		Map<String, Subforum> subforums = new CaseInsensitiveMap<>();
 		Map<String, Subforum> retVal = new CaseInsensitiveMap<>();
@@ -231,11 +224,12 @@ public class SubforumServices {
 			subforums = mapper.readValue(subforumFile, new TypeReference<CaseInsensitiveMap<String, Subforum>>() {
 			});
 			for (String s : subforums.keySet()) {
-				if(StringUtilities.containsString(subforums.get(s).getTitle(), searchString, false)) {
+				if (StringUtilities.containsString(subforums.get(s).getTitle(), searchString, false)) {
 					retVal.put(s, subforums.get(s));
-				}else if(StringUtilities.containsString(subforums.get(s).getDescription(), searchString, false)) {
+				} else if (StringUtilities.containsString(subforums.get(s).getDescription(), searchString, false)) {
 					retVal.put(s, subforums.get(s));
-				}else if(StringUtilities.containsString((subforums.get(s).getModerators()).get(0), searchString, false)) {
+				} else if (StringUtilities.containsString((subforums.get(s).getModerators()).get(0), searchString,
+						false)) {
 					retVal.put(s, subforums.get(s));
 				}
 			}
@@ -245,11 +239,11 @@ public class SubforumServices {
 		}
 		return retVal;
 	}
-	
+
 	@GET
 	@Path("/searchTitle/{title}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<String, Subforum> searchTitle(@PathParam("title") String title){
+	public Map<String, Subforum> searchTitle(@PathParam("title") String title) {
 		File subforumFile = FileUtilities.getSubforumsFile();
 		Map<String, Subforum> subforums = new CaseInsensitiveMap<>();
 		Map<String, Subforum> retVal = new CaseInsensitiveMap<>();
@@ -258,7 +252,7 @@ public class SubforumServices {
 			subforums = mapper.readValue(subforumFile, new TypeReference<CaseInsensitiveMap<String, Subforum>>() {
 			});
 			for (String s : subforums.keySet()) {
-				if(StringUtilities.containsString(subforums.get(s).getTitle(), title, false)) {
+				if (StringUtilities.containsString(subforums.get(s).getTitle(), title, false)) {
 					retVal.put(s, subforums.get(s));
 				}
 			}
@@ -268,11 +262,11 @@ public class SubforumServices {
 		}
 		return retVal;
 	}
-	
+
 	@GET
 	@Path("/searchDesc/{desc}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<String, Subforum> searchDesc(@PathParam("desc") String desc){
+	public Map<String, Subforum> searchDesc(@PathParam("desc") String desc) {
 		File subforumFile = FileUtilities.getSubforumsFile();
 		Map<String, Subforum> subforums = new CaseInsensitiveMap<>();
 		Map<String, Subforum> retVal = new CaseInsensitiveMap<>();
@@ -281,7 +275,7 @@ public class SubforumServices {
 			subforums = mapper.readValue(subforumFile, new TypeReference<CaseInsensitiveMap<String, Subforum>>() {
 			});
 			for (String s : subforums.keySet()) {
-				if(StringUtilities.containsString(subforums.get(s).getDescription(), desc, false)) {
+				if (StringUtilities.containsString(subforums.get(s).getDescription(), desc, false)) {
 					retVal.put(s, subforums.get(s));
 				}
 			}
@@ -291,11 +285,11 @@ public class SubforumServices {
 		}
 		return retVal;
 	}
-	
+
 	@GET
 	@Path("/searchResMod/{resMod}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<String, Subforum> searchResMod(@PathParam("resMod") String resMod){
+	public Map<String, Subforum> searchResMod(@PathParam("resMod") String resMod) {
 		File subforumFile = FileUtilities.getSubforumsFile();
 		Map<String, Subforum> subforums = new CaseInsensitiveMap<>();
 		Map<String, Subforum> retVal = new CaseInsensitiveMap<>();
@@ -304,7 +298,7 @@ public class SubforumServices {
 			subforums = mapper.readValue(subforumFile, new TypeReference<CaseInsensitiveMap<String, Subforum>>() {
 			});
 			for (String s : subforums.keySet()) {
-				if(StringUtilities.containsString((subforums.get(s).getModerators()).get(0), resMod, false)) {
+				if (StringUtilities.containsString((subforums.get(s).getModerators()).get(0), resMod, false)) {
 					retVal.put(s, subforums.get(s));
 				}
 			}

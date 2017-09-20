@@ -83,7 +83,6 @@ public class CommentServices {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public boolean newComment(Comment comm) {
-		System.out.println("newComm--------------------------------------------");
 		boolean retVal = true;
 		comm.setAuthor(((User) request.getSession().getAttribute("user")).getUsername());
 		comm.setParentCom(null);
@@ -156,7 +155,6 @@ public class CommentServices {
 				retVal = false;
 			}
 		}
-		System.out.println("newCommEND--------------------------------------------");
 		return retVal;
 	}
 
@@ -166,7 +164,6 @@ public class CommentServices {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public boolean reply(Comment comm) {
 		boolean retVal = true;
-		System.out.println("REPLY----------------------------------------------------");
 		int i = comm.getParentComId();
 		comm.setAuthor(((User) request.getSession().getAttribute("user")).getUsername());
 		Topic t = (Topic) request.getSession().getAttribute("topic");
@@ -196,11 +193,9 @@ public class CommentServices {
 			writer.println(sComms);
 			writer.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			FileOutputStream fos;
 			try {
 				File fsad = new File("exception.txt");
-				System.out.println(fsad.getAbsolutePath());
 				fos = new FileOutputStream(fsad, true);
 				PrintStream ps = new PrintStream(fos);
 				e.printStackTrace(ps);
@@ -208,7 +203,6 @@ public class CommentServices {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			System.out.println("REPLY ERROR");
 			retVal = false;
 		}
 		return retVal;
@@ -324,7 +318,6 @@ public class CommentServices {
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean deleteComment(LikeBean lb) {
 		boolean retVal = true;
-		System.out.println("deleteComm---------------------------------------------");
 		Subforum sf = (Subforum) request.getSession().getAttribute("subforum");
 		Topic t = (Topic) request.getSession().getAttribute("topic");
 
@@ -332,7 +325,6 @@ public class CommentServices {
 		ObjectMapper mapper = new ObjectMapper();
 		ArrayList<Comment> comments = new ArrayList<>();
 		try {
-			System.out.println("TRY");
 			comments = mapper.readValue(commentsFile, new TypeReference<ArrayList<Comment>>() {
 			});
 			comments.get(lb.getId()).setDeleted(true);
@@ -347,9 +339,7 @@ public class CommentServices {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			retVal = false;
-			System.out.println("deleteCommErr");
 		}
-		System.out.println("deleteCommEND---------------------------------------------");
 		return retVal;
 	}
 	

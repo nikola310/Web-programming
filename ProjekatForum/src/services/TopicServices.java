@@ -44,7 +44,6 @@ public class TopicServices {
 	@Path("/getTopics")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Topic> getTopics() {
-		System.out.println("getTopics--------------------------------------------------------------------");
 		Subforum sf = (Subforum) request.getSession().getAttribute("subforum");
 		File f = FileUtilities.getTopicsFile(sf.getTitle());
 		ObjectMapper mapper = new ObjectMapper();
@@ -54,11 +53,9 @@ public class TopicServices {
 				tmp = mapper.readValue(f, new TypeReference<CaseInsensitiveMap<String, Topic>>() {
 				});
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		System.out.println("getTopicsEND--------------------------------------------------------------------");
 		return tmp;
 	}
 
@@ -67,7 +64,6 @@ public class TopicServices {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public ErrorBean createNew(Topic t) {
-		System.out.println("new topic---------------------------------------");
 		ErrorBean er = new ErrorBean();
 		User u = (User) request.getSession().getAttribute("user");
 		Subforum sf = (Subforum) request.getSession().getAttribute("subforum");
@@ -77,7 +73,6 @@ public class TopicServices {
 		t.setUsrResp(new ArrayList<String>());
 		File f = FileUtilities.getTopicsFile(sf.getTitle());
 		Map<String, Topic> topics = new CaseInsensitiveMap<>();
-		System.out.println(topics.getClass());
 		ObjectMapper mapper = new ObjectMapper();
 		if (f.exists()) {
 			try {
@@ -85,10 +80,8 @@ public class TopicServices {
 				});
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println(topics.getClass());
 			if (topics.containsKey(t.getTitle())) {
 				er.setErrCode(ErrorBean.ALREADY_EXISTS_ERROR);
 				er.setFailed(true);
@@ -135,7 +128,6 @@ public class TopicServices {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Topic getTopic() {
 		Topic t = (Topic) request.getSession().getAttribute("topic");
-		System.out.println(t.getTitle());
 		return t;
 	}
 
@@ -167,7 +159,6 @@ public class TopicServices {
 
 			ArrayList<String> st = t.getUsrResp();
 			st.add(u.getUsername());
-			System.out.println(st.size());
 			t.setUsrResp(st);
 			topics.get(t.getTitle()).setUsrResp(st);
 
@@ -224,7 +215,6 @@ public class TopicServices {
 
 			ArrayList<String> st = t.getUsrResp();
 			st.add(u.getUsername());
-			System.out.println(st.size());
 			t.setUsrResp(st);
 			topics.get(t.getTitle()).setUsrResp(st);
 
@@ -256,18 +246,14 @@ public class TopicServices {
 	@Path("/delete")
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean deleteTopic() {
-		System.out.println("delete topic");
 		boolean retVal = true;
 		Subforum sf = (Subforum) request.getSession().getAttribute("subforum");
 		Topic t = (Topic) request.getSession().getAttribute("topic");
-		System.out.println(sf.getTitle() + t.getTitle());
 		File topicsFile = FileUtilities.getTopicsFile(sf.getTitle());
-		System.out.println(topicsFile.getAbsolutePath());
 		File topicsDir = FileUtilities.getTopicsDir(sf.getTitle(), t.getTitle());
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Topic> topics = new HashMap<>();
 		try {
-			System.out.println("readvalue");
 			topics = mapper.readValue(topicsFile, new TypeReference<CaseInsensitiveMap<String, Topic>>() {
 			});
 			topics.remove(t.getTitle());
@@ -353,10 +339,8 @@ public class TopicServices {
 		try {
 			subforums = mapper.readValue(subforumFile, new TypeReference<CaseInsensitiveMap<String, Subforum>>() {
 			});
-			System.out.println("pre for");
 			for (String s : subforums.keySet()) {
 				File topicFile = FileUtilities.getTopicsFile(s);
-				System.out.println(topicFile.getAbsolutePath());
 				Map<String, Topic> tmp = new CaseInsensitiveMap<String, Topic>();
 				tmp = mapper.readValue(topicFile, new TypeReference<CaseInsensitiveMap<String, Topic>>() {
 				});
@@ -395,7 +379,6 @@ public class TopicServices {
 			});
 			for (String s : subforums.keySet()) {
 				File topicFile = FileUtilities.getTopicsFile(s);
-				System.out.println(topicFile.getAbsolutePath());
 				Map<String, Topic> tmp = new CaseInsensitiveMap<String, Topic>();
 				tmp = mapper.readValue(topicFile, new TypeReference<CaseInsensitiveMap<String, Topic>>() {
 				});
@@ -426,7 +409,6 @@ public class TopicServices {
 			});
 			for (String s : subforums.keySet()) {
 				File topicFile = FileUtilities.getTopicsFile(s);
-				System.out.println(topicFile.getAbsolutePath());
 				Map<String, Topic> tmp = new CaseInsensitiveMap<String, Topic>();
 				tmp = mapper.readValue(topicFile, new TypeReference<CaseInsensitiveMap<String, Topic>>() {
 				});
@@ -457,7 +439,6 @@ public class TopicServices {
 			});
 			for (String s : subforums.keySet()) {
 				File topicFile = FileUtilities.getTopicsFile(s);
-				System.out.println(topicFile.getAbsolutePath());
 				Map<String, Topic> tmp = new CaseInsensitiveMap<String, Topic>();
 				tmp = mapper.readValue(topicFile, new TypeReference<CaseInsensitiveMap<String, Topic>>() {
 				});
@@ -486,10 +467,8 @@ public class TopicServices {
 		try {
 			subforums = mapper.readValue(subforumFile, new TypeReference<CaseInsensitiveMap<String, Subforum>>() {
 			});
-			System.out.println("pre for");
 			for (String s : subforums.keySet()) {
 				File topicFile = FileUtilities.getTopicsFile(s);
-				System.out.println(topicFile.getAbsolutePath());
 				Map<String, Topic> tmp = new CaseInsensitiveMap<String, Topic>();
 				tmp = mapper.readValue(topicFile, new TypeReference<CaseInsensitiveMap<String, Topic>>() {
 				});
@@ -498,7 +477,6 @@ public class TopicServices {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return retVal;

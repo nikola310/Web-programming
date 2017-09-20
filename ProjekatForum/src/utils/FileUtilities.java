@@ -7,9 +7,7 @@ public class FileUtilities {
 	public static File getUsersFile() {
 		String t = System.getProperty("user.dir");
 		String ts = t.substring(0, t.lastIndexOf(File.separatorChar, t.lastIndexOf(File.separatorChar) - 1));
-		// System.out.println(ts);
 		ts = ts.concat(File.separatorChar + "resources" + File.separatorChar + "users.json");
-		// System.out.println(ts);
 		File f = new File(ts);
 		return f;
 	}
@@ -27,7 +25,6 @@ public class FileUtilities {
 		String ts = t.substring(0, t.lastIndexOf(File.separatorChar, t.lastIndexOf(File.separatorChar) - 1));
 		ts = ts.concat(File.separatorChar + "resources" + File.separatorChar + "subforums" + File.separatorChar + dir);
 		File sfFile = new File(ts);
-		System.out.println(ts);
 		return sfFile;
 	}
 
@@ -85,15 +82,6 @@ public class FileUtilities {
 		return f;
 	}
 
-	public static File getUsersSavedTopicsFile(String user) {
-		String s = System.getProperty("user.dir");
-		String ts = s.substring(0, s.lastIndexOf(File.separatorChar, s.lastIndexOf(File.separatorChar) - 1));
-		String temp = ts.concat(File.separatorChar + "resources" + File.separatorChar + "users" + File.separatorChar
-				+ user + File.separatorChar + user + "-topics.json");
-		File f = new File(temp);
-		return f;
-	}
-
 	public static File getUsersMsgsFile(String user) {
 		String s = System.getProperty("user.dir");
 		String ts = s.substring(0, s.lastIndexOf(File.separatorChar, s.lastIndexOf(File.separatorChar) - 1));
@@ -103,13 +91,5 @@ public class FileUtilities {
 		return f;
 	}
 	
-	public static File getSavedMsgsFile(String user) {
-		String s = System.getProperty("user.dir");
-		String ts = s.substring(0, s.lastIndexOf(File.separatorChar, s.lastIndexOf(File.separatorChar) - 1));
-		String temp = ts.concat(File.separatorChar + "resources" + File.separatorChar + "users" + File.separatorChar
-				+ user + File.separatorChar + "saved-msgs.json");
-		File f = new File(temp);
-		return f;
-	}
 
 }

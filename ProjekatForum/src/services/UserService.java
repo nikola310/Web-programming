@@ -62,7 +62,6 @@ public class UserService {
 			});
 			if (tmp.containsKey(u.getUsername())) {
 				if (u.getPassword().equals(tmp.get(u.getUsername()).getPassword())) {
-					System.out.println("Korisnik " + u.getUsername() + " se prijavio na forum.");
 					request.getSession().setAttribute("user", tmp.get(u.getUsername()));
 					retVal = true;
 					return retVal;
@@ -92,7 +91,6 @@ public class UserService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public ErrorBean register(User u) {
-		System.out.println("---------------------------------------------------------");
 		ErrorBean retVal = new ErrorBean();
 		File f = FileUtilities.getUsersFile();
 		File udir = FileUtilities.getUsersDir(u.getUsername());
@@ -101,7 +99,6 @@ public class UserService {
 		} else {
 			System.out.println("user dir not created");
 		}
-		System.out.println(udir.getAbsolutePath());
 		u.setUserType(User.NORMAL);
 		ObjectMapper mapper = new ObjectMapper();
 		if (f.exists()) {
@@ -111,34 +108,26 @@ public class UserService {
 				});
 
 				if (tmp.containsKey(u.getUsername())) {
-					System.out.println("Vec postoji korisnik sa imenom: " + u.getUsername());
 					retVal.setFailed(true);
 					retVal.setErrCode(ErrorBean.USER_ERROR);
 				} else {
 					for (String s : tmp.keySet()) {
 						if (tmp.get(s).getEmail().equals(u.getEmail())) {
-							System.out.println("Vec postoji korisnik sa emailom: " + u.getEmail());
 							retVal.setFailed(true);
 							retVal.setErrCode(ErrorBean.EMAIL_ERROR);
 						}
 					}
 					if (retVal.isFailed() == false) {
-						System.out.println("---------------------------------------------------------");
-						System.out.println("Registriran korisnik: " + u.getUsername());
 						tmp.put(u.getUsername(), u);
 						String sUser = "";
 						sUser = mapper.writeValueAsString(tmp);
-						// System.out.println(sUser);
-						// File novo = new File(ts);
-						// f.delete();
 						try {
 							PrintWriter writer = new PrintWriter(f, "UTF-8");
 							writer.println(sUser);
 							writer.close();
 						} catch (IOException e) {
-							// do something
+
 						}
-						System.out.println("---------------------------------------------------------");
 					}
 				}
 
@@ -150,13 +139,10 @@ public class UserService {
 		} else {
 			Map<String, User> map = new CaseInsensitiveMap<>();
 			map.put(u.getUsername(), u);
-			System.out.println("---------------------------------------------------------");
-			System.out.println("Registriran korisnik: " + u.getUsername());
 			String sUser = "";
 			try {
 				sUser = mapper.writeValueAsString(map);
 			} catch (JsonProcessingException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			try {
@@ -166,7 +152,6 @@ public class UserService {
 			} catch (IOException e) {
 				// do something
 			}
-			System.out.println("---------------------------------------------------------");
 		}
 		return retVal;
 	}
@@ -177,24 +162,18 @@ public class UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean setHeader(StringBean s) {
 		boolean retVal = false;
-		System.out.println("setHeader-------------------------------------------------------------");
-		System.out.println(s.getHeader() + s.getValue());
 		if (s.getHeader().equals("subforum")) {
 			File f = FileUtilities.getSubforumsFile();
 			ObjectMapper mapper = new ObjectMapper();
 			try {
-				System.out.println("try");
 				Map<String, Subforum> map = mapper.readValue(f,
 						new TypeReference<CaseInsensitiveMap<String, Subforum>>() {
 						});
-				// Subforum sf = map.get(s.getValue());
 				request.getSession().setAttribute(s.getHeader(), map.get(s.getValue()));
 				retVal = true;
 			} catch (FileNotFoundException fe) {
 				System.out.println(fe.getMessage());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
 				System.out.println("subforum header set err");
 				retVal = false;
 			}
@@ -204,13 +183,9 @@ public class UserService {
 			try {
 				HashMap<String, User> map = mapper.readValue(f, new TypeReference<HashMap<String, User>>() {
 				});
-				System.out.println(map.get(s.getValue()).getUsername());
-				System.out.println("StringBean: " + s.getHeader() + " " + s.getValue());
 				request.getSession().setAttribute(s.getHeader(), map.get(s.getValue()));
 				retVal = true;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
 				System.err.println("user header set err");
 				retVal = false;
 			}
@@ -222,7 +197,6 @@ public class UserService {
 			try {
 				map = mapper.readValue(f, new TypeReference<CaseInsensitiveMap<String, Topic>>() {
 				});
-				System.out.println("StringBean: " + s.getHeader() + " " + s.getValue());
 				request.getSession().setAttribute(s.getHeader(), map.get(s.getValue()));
 				retVal = true;
 			} catch (IOException e) {
@@ -230,7 +204,6 @@ public class UserService {
 				retVal = false;
 			}
 		}
-		System.out.println("setHeaderEND-------------------------------------------------------------");
 		return retVal;
 	}
 
@@ -247,7 +220,6 @@ public class UserService {
 				if (s.equals("user")) {
 					User u = (User) request.getSession().getAttribute(s);
 
-					System.out.println(u.equals(null));
 					if (u.equals(null)) {
 						retVal = "";
 					} else {
@@ -274,7 +246,6 @@ public class UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ErrorBean changeUserType(StringBean sb) {
 		ErrorBean er = new ErrorBean();
-		System.out.println(sb.getHeader() + sb.getValue());
 		File f = FileUtilities.getUsersFile();
 		File subforumsFile = FileUtilities.getSubforumsFile();
 		ObjectMapper mapper = new ObjectMapper();
@@ -320,16 +291,12 @@ public class UserService {
 						writer.close();
 					}
 				}
-				System.out.println("4");
 				String sUser = mapper.writeValueAsString(tmp);
 				PrintWriter pw = new PrintWriter(f, "UTF-8");
 				pw.println(sUser);
 				pw.close();
-				System.out.println("tryEnd----------------------");
 				return er;
 			} catch (IOException e) {
-				// TODO: handle exception
-				// e.printStackTrace();
 				er.setFailed(true);
 				er.setErrCode(ErrorBean.FILE_ERROR);
 				return er;
@@ -398,7 +365,6 @@ public class UserService {
 	@Path("/subscribed")
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean isSubscribed() {
-		System.out.println("subscribed");
 		User u = (User) request.getSession().getAttribute("user");
 		Subforum sf = (Subforum) request.getSession().getAttribute("subforum");
 		ArrayList<String> s = u.getSubforum();
@@ -507,17 +473,14 @@ public class UserService {
 	public Map<String, Subforum> getSubforums() {
 		User u = (User) request.getSession().getAttribute("user");
 		File f = FileUtilities.getSubforumsFile();
-		System.out.println(f.getAbsolutePath());
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Subforum> tmp = new CaseInsensitiveMap<>();
 		Map<String, Subforum> retVal = new CaseInsensitiveMap<>();
 		ArrayList<String> subforums = u.getSubforum();
-		System.out.println(subforums.size());
 		if (f.exists()) {
 			try {
 				tmp = mapper.readValue(f, new TypeReference<CaseInsensitiveMap<String, Subforum>>() {
 				});
-				System.out.println(tmp.size());
 				for (String s : tmp.keySet()) {
 					for (int i = 0; i < subforums.size(); i++) {
 						if (subforums.get(i).equals(s)) {
@@ -538,7 +501,6 @@ public class UserService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean saveComment(LikeBean lb) {
-		System.out.println("saveComment----------------------------------------------");
 		Subforum sf = (Subforum) request.getSession().getAttribute("subforum");
 		Topic t = (Topic) request.getSession().getAttribute("topic");
 		User u = (User) request.getSession().getAttribute("user");
@@ -568,7 +530,6 @@ public class UserService {
 			PrintWriter writer = new PrintWriter(userFile, "UTF-8");
 			writer.println(sUsers);
 			writer.close();
-			System.out.println("saveCommentEND----------------------------------------------");
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -591,7 +552,6 @@ public class UserService {
 			});
 			msgsIndex = u.getSavedMessages();
 			if (!msgsIndex.contains(index.getValue())) {
-				System.out.println("JEBENI IF");
 				msgsIndex.add(index.getValue());
 			}
 			users.get(u.getUsername()).setSavedMessages(msgsIndex);
@@ -666,7 +626,6 @@ public class UserService {
 						savedCommsId.get(i).getTopic());
 				ArrayList<Comment> comments = mapper.readValue(commsFile, new TypeReference<ArrayList<Comment>>() {
 				});
-				System.out.println(i);
 				commentsRetVal.add(comments.get(i));
 			}
 
